@@ -10,11 +10,9 @@ function Buscar() {
   xhr.open('GET', `https://api.github.com/users/${username}`);
   xhr.send(null);
 
-  xhr.onreadystatechange = function() {
-    if(xhr.readyState === 4) {
-      if(xhr.status === 200) {
-        var data = JSON.parse(xhr.responseText);
-        var userImg = data.avatar_url,
+  function renderApp(data) {
+    profileElement.innerHTML = "";
+    var userImg = data.avatar_url,
         userName = data.name,
         userBio = data.bio;
         
@@ -32,14 +30,18 @@ function Buscar() {
         var bioText = document.createTextNode(userBio);
         bioElement.appendChild(bioText);
         profileElement.appendChild(bioElement);
+  }
 
-
+  xhr.onreadystatechange = function() {
+    if(xhr.readyState === 4) {
+      if(xhr.status === 200) {
+        var data = JSON.parse(xhr.responseText);
+        renderApp(data);
       } else {
         console.log("Não foi possível achar o usuário")
       }
     }
   }
-
 }
 
 buttonElement.onclick = Buscar;
